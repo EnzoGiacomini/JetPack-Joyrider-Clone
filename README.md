@@ -4,8 +4,6 @@ An endless runner built in Unity as a self-imposed challenge: recreate the core 
 
 The scope was intentionally limited to the base mechanics. Visually it diverges from the original — the source sprites were not available, so the art was replaced rather than copied.
 
-> **Add here:** a GIF showing the hazard variety, and a link to a playable WebGL build.
-
 ---
 
 ## The core problem: difficulty as a system
