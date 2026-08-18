@@ -1,22 +1,81 @@
-# JetPack-Joyrider
-An attempt and self-challenge to recreate a classic mobile game. The game has only the basic mechanics.
-Visually, isn't very loyal to the original game and that's because it was pretty difficult to find the original sprite.
-However, the simple mechanic of random types of guns is in the game.
-The script "MapManager" is the manager of the difficulty. It controls the randomness and the mechanics like:
-- Horizontal Laser Spawn - which spawns and takes a little time to start so the player can escape.
-- Missile - Spawns an alert of incoming missile and a few seconds after, it fires a missile.
-- Bombs - Spawns randomly bombs, with a chance of spawning multiple bombs.
-- Vertical Laser - This one, has more than one type.
-There are more scripts, like:
-- HUDManager - its name explains itself.
-- Menu - responsible for the menu mechanics.
-- PlayerScript - Controls the player mechanics and stats.
-- SaveManager - Just saves the highest score.
-- Miscellaneous
+# JetPack Joyrider
 
-Some ideas for the future:
-- add sound
-- add bosses
-- add infinity mode and story mode
+An endless runner built in Unity as a self-imposed challenge: recreate the core loop of a classic mobile game from scratch, without a tutorial to follow.
 
-thank you for your attention.
+The scope was intentionally limited to the base mechanics. Visually it diverges from the original — the source sprites were not available, so the art was replaced rather than copied.
+
+> **Add here:** a GIF showing the hazard variety, and a link to a playable WebGL build.
+
+---
+
+## The core problem: difficulty as a system
+
+The interesting part of this project isn't the player controller — it's `MapManager`, which acts as a **hazard director**. Instead of hardcoding a level, it decides at runtime what to spawn, when, and how punishing it should be.
+
+Each hazard carries its own timing contract so that randomness stays fair:
+
+- **Horizontal laser** — spawns and holds for a beat before activating, giving the player a window to escape.
+- **Missile** — displays an incoming-missile warning, then fires after a short delay.
+- **Bombs** — placed randomly, with a chance of spawning in clusters.
+- **Vertical laser** — multiple variants with different behaviours.
+
+The design rule throughout: every hazard telegraphs itself before it can kill. Randomness generates the challenge; the telegraph keeps a death feeling like the player's fault.
+
+---
+
+## Stack
+
+| | |
+|---|---|
+| Engine | Unity 6000.0.48f1 |
+| Language | C# |
+| Rendering | Universal Render Pipeline (URP) |
+| Input | Unity Input System |
+| Persistence | PlayerPrefs |
+
+---
+
+## Architecture
+
+```
+Assets/Script/
+├── MapManager.cs         # Hazard director: spawn timing, randomness, difficulty
+├── PlayerScript.cs       # Player movement, stats and weapon handling
+├── HUDManager.cs         # In-game HUD
+├── Menu.cs               # Menu navigation
+├── SaveManager.cs        # High-score persistence
+└── Misc/
+    ├── BackGroundScroller.cs   # Continuous background scroll
+    ├── MissiileScript.cs       # Missile warning + launch
+    └── SimpleLaserScript.cs    # Laser hazard behaviour
+```
+
+`SaveManager` is a singleton kept alive across scene loads via `DontDestroyOnLoad`, persisting the high score through `PlayerPrefs`.
+
+Single scene: `Assets/Scenes/Game.unity`.
+
+---
+
+## Running locally
+
+```bash
+git clone https://github.com/EnzoGiacomini/JetPack-Joyrider-Clone.git
+```
+
+Open the folder through **Unity Hub** with editor version `6000.0.48f1`, then load `Assets/Scenes/Game.unity` and press Play.
+
+---
+
+## Roadmap
+
+Planned but not implemented:
+
+- [ ] Sound and music
+- [ ] Boss encounters
+- [ ] Separate endless and story modes
+
+---
+
+## Credits
+
+Visual effects from the **JMO Assets** package.
